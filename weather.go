@@ -19,6 +19,26 @@ type weatherResponse struct {
 	Main      map[string]float32
 }
 
+func main() {
+	var args = os.Args
+	var cityWeather weatherResponse
+
+	if len(args) == 1 {
+		fmt.Println("Missing city argument")
+		return
+	}
+
+	// Get the city from the arguments list
+	cityWeather.queryCity = args[1]
+
+	if err := cityWeather.loadCurrentWeather(); err != nil {
+		fmt.Println("there was an error", err)
+	}
+
+    cityWeather.displayToConsole()
+}
+
+
 func getData(city string) (*http.Response, error) {
     return http.Get(fmt.Sprintf(urlPath, url.QueryEscape(city), appID))
 }
@@ -40,24 +60,7 @@ func (wr *weatherResponse) loadCurrentWeather() (err error) {
 	return nil
 }
 
-func main() {
-	var args = os.Args
-	var cityWeather weatherResponse
-
-	if len(args) == 1 {
-		fmt.Println("Missing city argument")
-		return
-	}
-
-	// Get the city from the arguments list
-	cityWeather.queryCity = args[1]
-
-	err := cityWeather.loadCurrentWeather()
-
-	if err != nil {
-		fmt.Println("there was an error", err)
-	}
-
-	fmt.Printf("=== Weather in %s ===\n", cityWeather.Name)
-	fmt.Printf("%s with tempature of %.2f celsius", cityWeather.Weather[0]["description"], cityWeather.Main["temp"])
+func (wr *weatherResponse) displayToConsole() {
+    fmt.Printf("=== Weather in %s ===\n", wr.Name)
+	fmt.Printf("%s with tempature of %.2f celsius", wr.Weather[0]["description"], wr.Main["temp"])
 }
