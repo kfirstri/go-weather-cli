@@ -35,19 +35,18 @@ func main() {
 		fmt.Println("there was an error", err)
 	}
 
-    cityWeather.displayToConsole()
+	cityWeather.displayToConsole()
 }
 
-
 func getData(city string) (*http.Response, error) {
-    return http.Get(fmt.Sprintf(urlPath, url.QueryEscape(city), appID))
+	return http.Get(fmt.Sprintf(urlPath, url.QueryEscape(city), appID))
 }
 
 func (wr *weatherResponse) loadCurrentWeather() (err error) {
-    var response *http.Response
+	var response *http.Response
 
 	// Getting the data from the openweathermap API
-    if response, err = getData(wr.queryCity); err != nil {
+	if response, err = getData(wr.queryCity); err != nil {
 		return err
 	}
 
@@ -61,6 +60,6 @@ func (wr *weatherResponse) loadCurrentWeather() (err error) {
 }
 
 func (wr *weatherResponse) displayToConsole() {
-    fmt.Printf("=== Weather in %s ===\n", wr.Name)
+	fmt.Printf("=== Weather in %s ===\n", wr.Name)
 	fmt.Printf("%s with tempature of %.2f celsius", wr.Weather[0]["description"], wr.Main["temp"])
 }
